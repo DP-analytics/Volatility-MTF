@@ -6,24 +6,29 @@ Kluczowe cechy
 Metody kalkulacji:
 
 Zwroty proste: (Cena₁ - Cena₀) / Cena₀
+
 Zwroty logarytmiczne: ln(Cena₁ / Cena₀)
 
 Pasma zmienności:
 
 ±1σ: 68% prawdopodobieństwa pozostania w zakresie
+
 ±2σ: 95% prawdopodobieństwa pozostania w zakresie
+
 ±3σ: 99.7% prawdopodobieństwa pozostania w zakresie
 
 Zastosowanie np w strategii Iron Condor
 Optymalne warunki wejścia:
 
 Wysoka zmienność implikowana (IV > zmienność historyczna)
+
 Cena w środkowej części kanału ±1σ
+
 Stabilne środowisko makroekonomiczne
 
 Rozmieszczenie strajków:
 
-SHORT strike: wewnątrz kanału ±1σ (68% prawdopodobieństwa wygaśnięcia bezwartościowo)
+SHORT strike: wewnątrz kanału ±1σ 
 LONG strike: poza kanałem ±2σ dla ochrony przed dużymi ruchami
 
 
