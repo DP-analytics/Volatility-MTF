@@ -1,6 +1,6 @@
 Wskaźnik Zmienności Multi-Timeframe to narzędzie techniczne obliczające historyczną zmienność na podstawie odchylenia standardowego zwrotów cenowych. Wykorzystuje rozkład normalny do wyznaczenia poziomów prawdopodobieństwa (68%, 95%, 99.7%) dla przyszłych ruchów ceny. 
 
-WAŻNE: PRAWDOPODOBIEŃSTWO BAZUJE NA ROZKŁADZIE PODSTAWOWYM, NIE NA STATYSTYCE!
+WAŻNE: PRAWDOPODOBIEŃSTWO BAZUJE NA ROZKŁADZIE NORMALNYM, NIE NA STATYSTYCE!
 ![image](https://github.com/user-attachments/assets/f4c20fb9-c208-4626-9c80-db23aa0cceee)
 
 Kluczowe cechy
