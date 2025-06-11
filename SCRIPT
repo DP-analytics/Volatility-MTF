@@ -1,0 +1,48 @@
+//@version=5
+indicator("Volatility (%) MTF", overlay=true)
+
+// User inputs
+length = input.int(title="Period Length", defval=30, minval=1)
+res = input.timeframe(title="Volatility Timeframe", defval="", tooltip="Pozostaw puste dla aktualnego interwału")
+method  = input.string(title="Return Method", defval="Simple", options=["Simple", "Log"], tooltip="Choose between simple returns or log returns.")
+
+// Funkcja do wyliczenia zmienności i zakresów na danym interwale
+f_volatility(_length, _method) =>
+    var float ret = na
+    if _method == "Simple"
+        ret := (close - close[1]) / close[1]
+    else
+        ret := math.log(close / close[1])
+    vol = ta.stdev(ret, _length)
+    volPct = vol * 100
+    upper_band_1 = close * (1 + vol)
+    lower_band_1 = close * (1 - vol)
+    upper_band_2 = close * (1 + 2 * vol)
+    lower_band_2 = close * (1 - 2 * vol)
+    upper_band_3 = close * (1 + 3 * vol)
+    lower_band_3 = close * (1 - 3 * vol)
+    range_1_pct = ((upper_band_1 - lower_band_1) / close) * 100
+    range_2_pct = ((upper_band_2 - lower_band_2) / close) * 100
+    range_3_pct = ((upper_band_3 - lower_band_3) / close) * 100
+    [volPct, range_1_pct, range_2_pct, range_3_pct, upper_band_1, lower_band_1, upper_band_2, lower_band_2, upper_band_3, lower_band_3]
+
+// Pobranie wartości z wybranego interwału lub z bieżącego jeśli puste
+[volPct_mtf, range1_mtf, range2_mtf, range3_mtf, ub1_mtf, lb1_mtf, ub2_mtf, lb2_mtf, ub3_mtf, lb3_mtf] = request.security(syminfo.tickerid, res == "" ? timeframe.period : res, f_volatility(length, method))
+
+// Wyświetlenie danych w tabeli
+var table vol_table = table.new(position.top_right, 1, 6, border_width=1)
+if barstate.islast
+    table.cell(vol_table, 0, 0, text="Volatility (±1σ): " + str.tostring(volPct_mtf, format.percent) + " (~68%)", text_color=color.white, bgcolor=color.gray)
+    table.cell(vol_table, 0, 1, text="Range ±1σ: " + str.tostring(range1_mtf, format.percent), text_color=color.white, bgcolor=color.gray)
+    table.cell(vol_table, 0, 2, text="Volatility (±2σ): " + str.tostring(volPct_mtf * 2, format.percent) + " (~95%)", text_color=color.white, bgcolor=color.gray)
+    table.cell(vol_table, 0, 3, text="Range ±2σ: " + str.tostring(range2_mtf, format.percent), text_color=color.white, bgcolor=color.gray)
+    table.cell(vol_table, 0, 4, text="Volatility (±3σ): " + str.tostring(volPct_mtf * 3, format.percent) + " (~99.7%)", text_color=color.white, bgcolor=color.gray)
+    table.cell(vol_table, 0, 5, text="Range ±3σ: " + str.tostring(range3_mtf, format.percent), text_color=color.white, bgcolor=color.gray)
+
+// Rysowanie kanałów na wykresie
+plot(ub1_mtf, title="Upper Band ±1σ", color=color.red, linewidth=1)
+plot(lb1_mtf, title="Lower Band ±1σ", color=color.green, linewidth=1)
+plot(ub2_mtf, title="Upper Band ±2σ", color=color.red, linewidth=1)
+plot(lb2_mtf, title="Lower Band ±2σ", color=color.green, linewidth=1)
+plot(ub3_mtf, title="Upper Band ±3σ", color=color.red, linewidth=1)
+plot(lb3_mtf, title="Lower Band ±3σ", color=color.green, linewidth=1)
